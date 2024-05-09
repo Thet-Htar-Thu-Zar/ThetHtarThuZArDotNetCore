@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ThetHtarThuZArDotNetCore(MVC1).MvcApp", "ThetHtarThuZArDotNetCore(MVC1).MvcApp\ThetHtarThuZArDotNetCore(MVC1).MvcApp.fsproj", "{8611B86C-7273-40AF-BC39-DFE5CABD8461}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThetHtarThuZArDotNetCore.MvcApp", "ThetHtarThuZArDotNetCore.MvcApp\ThetHtarThuZArDotNetCore.MvcApp.csproj", "{040B38E5-23F2-44E6-A08A-F6B1232E0158}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8611B86C-7273-40AF-BC39-DFE5CABD8461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8611B86C-7273-40AF-BC39-DFE5CABD8461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8611B86C-7273-40AF-BC39-DFE5CABD8461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8611B86C-7273-40AF-BC39-DFE5CABD8461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{040B38E5-23F2-44E6-A08A-F6B1232E0158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{040B38E5-23F2-44E6-A08A-F6B1232E0158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{040B38E5-23F2-44E6-A08A-F6B1232E0158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{040B38E5-23F2-44E6-A08A-F6B1232E0158}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {176ABAED-DB09-429A-A0E1-E42A03E0069C}
+	EndGlobalSection
+EndGlobal

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data;
 using System.Data.SqlClient;
+using ThetHtarThuZArDotNetCore.MvcApp.Data;
 using ThetHtarThuZArDotNetCore.MvcApp.Models.Entities;
 using ThetHtarThuZArDotNetCore.MvcApp.Models.ResponseModel;
 
@@ -10,6 +10,8 @@ namespace ThetHtarThuZArDotNetCore.MvcApp.Controllers;
 
 public class CreateController : Controller
 {
+    #region Initializations
+
     private readonly IConfiguration _configuration;
 
     public CreateController(IConfiguration configuration)
@@ -17,16 +19,28 @@ public class CreateController : Controller
         _configuration = configuration;
     }
 
+    #endregion
+
+    #region Index
+
     public IActionResult Index()
     {
         return View();
     }
+
+    #endregion
+
+    #region Login Page
 
     [ActionName("LoginPage")]
     public IActionResult GotoLoginPage()
     {
         return View();
     }
+
+    #endregion
+
+    #region Login
 
     [HttpPost]
     public IActionResult Login(UserModel dataModel)
@@ -54,14 +68,14 @@ public class CreateController : Controller
             if (dt.Rows.Count > 0)
             {
                 TempData["successMessage"] = "Login Successful!";
-                HttpContext.Session.SetString("UserId", dt.Rows[0]["UserId"].ToString()!);
-            }
-            else
-            {
-                TempData["fail"] = "Login Fail!";
-            }
+                HttpContext.Session.SetString("UserId", dt.Rows[0]["UserId"].ToString()!); // set session
+                StaticData.UserId = Convert.ToInt64(dt.Rows[0]["UserId"]); // set id using setter
 
-            return RedirectToAction("Index");
+                return RedirectToAction("UserManagement");
+            }
+            TempData["fail"] = "Login Fail!";
+
+            return RedirectToAction("LoginPage");
         }
         catch (Exception ex)
         {
@@ -69,10 +83,24 @@ public class CreateController : Controller
         }
     }
 
+    #endregion
+
+    #region User Management
+
     public IActionResult UserManagement()
     {
         try
         {
+            #region Validate user
+
+            if (StaticData.UserId == 0) // get id using getter
+            {
+                TempData["fail"] = "Login Fail!";
+                return RedirectToAction("LoginPage");
+            }
+
+            #endregion
+
             SqlConnection conn = new(_configuration.GetConnectionString("DbConnection"));
             conn.Open();
             string query = @"SELECT [UserId]
@@ -97,8 +125,11 @@ public class CreateController : Controller
         {
             throw new Exception(ex.Message);
         }
-
     }
+
+    #endregion
+
+    #region Edit User
 
     public IActionResult EditUser(long id)
     {
@@ -109,7 +140,6 @@ public class CreateController : Controller
                 TempData["error"] = "Please login first!";
                 return RedirectToAction("LoginPage");
             }
-
 
             SqlConnection conn = new(_configuration.GetConnectionString("DbConnection"));
             conn.Open();
@@ -132,13 +162,10 @@ public class CreateController : Controller
                 TempData["error"] = "No data found!";
 
             }
-
-
             string jsonStr = JsonConvert.SerializeObject(dt);
             List<UserModel> user = JsonConvert.DeserializeObject<List<UserModel>>(jsonStr)!;
 
             return View(user);
-
         }
         catch (Exception ex)
         {
@@ -146,6 +173,9 @@ public class CreateController : Controller
         }
     }
 
+    #endregion
+
+    #region Update User
 
     [HttpPost]
     public IActionResult Update(UpdateUserResponseModel requestModel)
@@ -181,12 +211,20 @@ WHERE UserId = @UserId AND IsActive = @IsActive ";
         }
     }
 
+    #endregion
+
+    #region Go to Create User Page
+
     [ActionName("UserCreatePage")]
 
     public IActionResult GotoUserCreatePage()
     {
         return View();
     }
+
+    #endregion
+
+    #region Create
 
     [HttpPost]
     public IActionResult Create(UserModel dataModel)
@@ -210,11 +248,15 @@ WHERE UserId = @UserId AND IsActive = @IsActive ";
             string query = @"INSERT INTO Users (UserName,Email, UserRole, IsActive) 
 VALUES(@UserName, @Email, @UserRole,@IsActive)";
             SqlCommand cmd = new(query, conn);
+            List<SqlParameter> parameters = new()
+            {
+                new SqlParameter("@UserName", dataModel.UserName),
+                new SqlParameter("@Email", dataModel.Email),
+                new SqlParameter("@UserRole", EnumUserRoles.User.ToString()),
+                new SqlParameter("@IsActive", true)
+            };
+            cmd.Parameters.AddRange(parameters.ToArray());
 
-            cmd.Parameters.AddWithValue("@UserName", dataModel.UserName);
-            cmd.Parameters.AddWithValue("@Email", dataModel.Email);
-            cmd.Parameters.AddWithValue("@UserRole", "user");
-            cmd.Parameters.AddWithValue("@IsActive", true);
             int result = cmd.ExecuteNonQuery();
 
             conn.Close();
@@ -227,6 +269,7 @@ VALUES(@UserName, @Email, @UserRole,@IsActive)";
             {
                 TempData["error"] = "Creating Fail!";
             }
+
             return RedirectToAction("UserManagement");
         }
         catch (Exception ex)
@@ -234,6 +277,10 @@ VALUES(@UserName, @Email, @UserRole,@IsActive)";
             throw new Exception(ex.Message);
         }
     }
+
+    #endregion
+
+    #region Delete
 
     public IActionResult Delete(long id)
     {
@@ -256,6 +303,7 @@ VALUES(@UserName, @Email, @UserRole,@IsActive)";
             {
                 TempData["error"] = "Deleting Fail!";
             }
+
             return RedirectToAction("UserManagement");
         }
         catch (Exception ex)
@@ -263,6 +311,10 @@ VALUES(@UserName, @Email, @UserRole,@IsActive)";
             throw new Exception(ex.Message);
         }
     }
+
+    #endregion
+
+    #region Is Duplicate
 
     private bool IsEmailDuplicate(string email)
     {
@@ -292,4 +344,17 @@ VALUES(@UserName, @Email, @UserRole,@IsActive)";
             throw new Exception(ex.Message);
         }
     }
+
+    #endregion
 }
+
+#region Enum User Roles
+
+public enum EnumUserRoles
+{
+    None,
+    User,
+    Admin
+}
+
+#endregion

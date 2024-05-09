@@ -1,5 +1,4 @@
 ﻿﻿@{
-    // Layout = "";
     ViewData["Title"] = "Edit User";
     var error = TempData["error"];
 }
@@ -17,7 +16,6 @@
                 @if (Model.Count > 0)
                 {
                     <form method="post" action="/Create/Update">
-
                         <input type="hidden" value="@Model[0].UserId" name="UserId" />
                         <label>User Name: </label>
                         <input class="form-control" type="text" required name="UserName" value="@Model[0].UserName" />

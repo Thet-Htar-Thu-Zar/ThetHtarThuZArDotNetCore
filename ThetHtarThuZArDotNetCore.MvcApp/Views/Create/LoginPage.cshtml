@@ -1,8 +1,15 @@
 ﻿﻿@{
-    // Layout = "";
     ViewData["Title"] = "Login Page";
     var error = TempData["error"];
 }
+
+@if (error is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        @error
+    </div>
+}
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -11,8 +18,6 @@
                     <h3 class="text-center">User Login</h3>
                 </div>
                 <div class="card-body">
-
-
                     <form method="post" action="/Create/Login">
 
                         <label>User Name: </label>
@@ -22,10 +27,7 @@
                         <input class="form-control" name="Email" required type="email" />
                         <br />
                         <a class="btn btn-outline-info" type="submit" href="/Create/EditUser">Login</a>
-
-                      
                     </form>
-
                 </div>
             </div>
         </div>

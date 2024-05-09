@@ -4,7 +4,7 @@
     var error = TempData["error"];
 }
 
-<h1>UserMangament</h1>
+<h1>User Management</h1>
 
 <a class="btn btn-outline-primary my-3" href="/Create/UserCreatePage">Create</a>
 
@@ -54,15 +54,13 @@
 
 @section scripts {
     <script>
-        function btnDelete(id) { 
-        if (id == null || id == "") {
-            return;
-        }
-        if (window.confirm("Are you sure you want to delete?")) {
-            window.location.href = `/Create/Delete/${id}`;
-        }
-        }
+        function btnDelete(id) {
+            if (id == 0 || id == null)
+                return;
 
+            if (window.confirm("")) {
+                window.location.href = `/Create/Delete/${id}`;
+            }
+        }
     </script>
 }
-

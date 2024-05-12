@@ -69,7 +69,7 @@ public class CreateController : Controller
             {
                 TempData["successMessage"] = "Login Successful!";
                 HttpContext.Session.SetString("UserId", dt.Rows[0]["UserId"].ToString()!); // set session
-                StaticData.UserId = Convert.ToInt64(dt.Rows[0]["UserId"]); // set id using setter
+               /* StaticData.UserId = Convert.ToInt64(dt.Rows[0]["UserId"]);*/ // set id using setter
 
                 return RedirectToAction("UserManagement");
             }
@@ -91,15 +91,15 @@ public class CreateController : Controller
     {
         try
         {
-            #region Validate user
+            //#region Validate user
 
-            if (StaticData.UserId == 0) // get id using getter
-            {
-                TempData["fail"] = "Login Fail!";
-                return RedirectToAction("LoginPage");
-            }
+            //if (StaticData.UserId == 0) // get id using getter
+            //{
+            //    TempData["fail"] = "Login Fail!";
+            //    return RedirectToAction("LoginPage");
+            //}
 
-            #endregion
+            //#endregion
 
             SqlConnection conn = new(_configuration.GetConnectionString("DbConnection"));
             conn.Open();
